@@ -16,6 +16,6 @@ git init
 git add -A
 git commit -m 'deploy'
 
-git push -f https://github.com/AfuSensi/truth-mta-wiki-bot.git master:website-deploy
+git push -f https://github.com/AfuSensi/truth-mta-wiki-bot-website.git master:deploy
 
 cd -
