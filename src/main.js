@@ -5,7 +5,7 @@ import store from "./store";
 import vuetify from "./plugins/vuetify";
 import VueGitHubButtons from "vue-github-buttons";
 import axios from "axios";
-axios.defaults.baseURL = "https://www.truth.afusensi.xyz/api";
+axios.defaults.baseURL = process.env.VUE_APP_API_BASE_URL;
 Vue.prototype.$axios = axios;
 
 // Stylesheet

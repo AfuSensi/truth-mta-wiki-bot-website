@@ -6,8 +6,11 @@ Vue.use(Vuex);
 
 // state
 const state = {
-  loginUrl:
-    "https://discordapp.com/api/oauth2/authorize?client_id=668482097710628906&redirect_uri=https%3A%2F%2Fwww.truth.afusensi.xyz%2Fcallback&response_type=code&scope=identify%20guilds",
+  loginUrl: `https://discordapp.com/api/oauth2/authorize?client_id=${
+    process.env.VUE_APP_DISCORD_CLIENT_ID
+  }&response_type=code&scope=identify%20guilds&redirect_uri=${encodeURIComponent(
+    process.env.VUE_APP_API_CALLBACK_URL
+  )}`,
   accessToken: null,
   loggingIn: false,
   loginError: null,
@@ -36,7 +39,7 @@ const actions = {
     this._vm.$axios
       .post("oauth/callback", {
         code,
-        redirectUri: "https://www.truth.afusensi.xyz/callback"
+        redirectUri: process.env.VUE_APP_API_CALLBACK_URL
       })
       .then(response => {
         localStorage.setItem("accessToken", response.data.access_token);
