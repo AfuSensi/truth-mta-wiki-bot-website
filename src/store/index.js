@@ -1,7 +1,7 @@
 import Vue from "vue";
 import Vuex from "vuex";
-// import axios from "axios";
 import router from "../router";
+
 Vue.use(Vuex);
 
 // state
@@ -43,6 +43,8 @@ const actions = {
       })
       .then(response => {
         localStorage.setItem("accessToken", response.data.access_token);
+        // eslint-disable-next-line no-console
+        // console.log(response.data);
         commit("loginStop", null);
         commit("updateAccessToken", response.data.access_token);
         commit("updateUserObject", response.data.user);
@@ -62,7 +64,7 @@ const actions = {
   fetchAccessToken({ commit, dispatch }) {
     const token = localStorage.getItem("accessToken");
     commit("updateAccessToken", token);
-    if (token) {
+    if (token && router.currentRoute.fullPath !== "/callback") {
       dispatch("fetchUserInfo");
     }
   },
