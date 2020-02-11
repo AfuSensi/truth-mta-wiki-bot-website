@@ -253,7 +253,7 @@ export default {
           }
         );
         // eslint-disable-next-line no-console
-        console.log(res.data);
+        // console.log(res.data);
 
         // Set channel settings defaults
         const channelSettings = [];
@@ -431,7 +431,7 @@ export default {
       generalDescriptions: {
         enableGet: {
           name: "Enable .wiki get Command",
-          description: "Enable .wiki <query> and .wiki get <quiry> commands"
+          description: "Enable .wiki <query> and .wiki get <query> commands"
         },
         enableBacktick: {
           name: "Enable `query`",
@@ -442,7 +442,7 @@ export default {
           description: "Enables the example fetching command"
         },
         enableSearch: {
-          name: "Enable .wiki search Commaand",
+          name: "Enable .wiki search Command",
           description: "Enables the wiki search command"
         },
         returnNoResultMessage: {
