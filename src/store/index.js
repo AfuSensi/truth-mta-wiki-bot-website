@@ -64,7 +64,7 @@ const actions = {
         } else {
           commit("setLoginRetry", 1);
           await sleep(2500);
-          dispatch("doLogin");
+          dispatch("doLogin", code);
         }
       });
   },
