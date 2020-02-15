@@ -1,12 +1,22 @@
 <template>
-  <v-container fluid fill-height>
+  <v-container fluid fill-height class="text-center">
     <v-row v-if="loggingIn">
-      <v-col>
+      <v-col cols="12">
         <h1>Logging in</h1>
+      </v-col>
+      <v-col cols="12">
+        <v-progress-circular
+          :width="3"
+          color="primary"
+          indeterminate
+          size="70"
+        ></v-progress-circular>
       </v-col>
     </v-row>
     <v-row v-if="loginError">
-      <v-col> Error logging in: {{ loginError }} </v-col>
+      <v-col>
+        <h1>Error logging in, Please try again</h1>
+      </v-col>
     </v-row>
   </v-container>
 </template>
@@ -24,8 +34,6 @@ export default {
   methods: {
     ...mapActions(["doLogin"]),
     async handleAuth() {
-      // eslint-disable-next-line no-console
-
       if (typeof this.$route.query.code === "string") {
         this.doLogin(this.$route.query.code);
       }

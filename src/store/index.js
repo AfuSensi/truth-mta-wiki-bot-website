@@ -13,9 +13,10 @@ const state = {
   )}`,
   accessToken: null,
   loggingIn: false,
-  loginError: null,
+  loginError: false,
   user: null,
-  dashboardGuildList: null
+  dashboardGuildList: null,
+  loginRetry: 0
 };
 
 // getters
@@ -33,7 +34,7 @@ const actions = {
       localStorage.removeItem("afterLoginRedirect");
     }
   },
-  doLogin({ commit, dispatch }, code) {
+  doLogin({ commit, dispatch, state }, code) {
     commit("loginStart");
 
     this._vm.$axios
@@ -50,12 +51,21 @@ const actions = {
         commit("updateUserObject", response.data.user);
         // Check for redirect
         dispatch("redirectOnFetch");
+        commit("setLoginRetry", 0);
       })
-      .catch(error => {
-        commit("loginStop", error.response.data.error);
-        commit("updateAccessToken", null);
+      .catch(async error => {
         // eslint-disable-next-line no-console
-        console.log(error);
+        if (state.loginRetry >= 1) {
+          commit("loginStop", true);
+          commit("updateAccessToken", null);
+          commit("setLoginRetry", 0);
+          // eslint-disable-next-line no-console
+          console.log(error.message || error);
+        } else {
+          commit("setLoginRetry", 1);
+          await sleep(2500);
+          dispatch("doLogin");
+        }
       });
   },
   doLogout({ commit }) {
@@ -107,10 +117,14 @@ const actions = {
 
 // mutations
 const mutations = {
-  loginStart: state => (state.loggingIn = true),
+  loginStart: state => {
+    state.loggingIn = true;
+    state.loginError = false;
+  },
   loginStop: (state, errorMessage) => {
     state.loggingIn = false;
     state.loginError = errorMessage;
+    state.loginRetry = 0;
   },
   updateAccessToken: (state, accessToken) => {
     state.accessToken = accessToken;
@@ -130,6 +144,9 @@ const mutations = {
   },
   updateDashboardGuildList: (state, value) => {
     state.dashboardGuildList = value;
+  },
+  setLoginRetry: (state, num) => {
+    state.loginRetry = num;
   }
 };
 
@@ -139,3 +156,11 @@ export default new Vuex.Store({
   actions,
   getters
 });
+
+function sleep(duration) {
+  return new Promise(function(resolve) {
+    setTimeout(function() {
+      resolve();
+    }, duration);
+  });
+}
