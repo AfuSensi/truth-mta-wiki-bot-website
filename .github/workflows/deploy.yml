@@ -25,7 +25,7 @@ jobs:
         username: ${{ secrets.DEPLOYUSER }}
         key: ${{ secrets.DEPLOYKEY }}
         port: ${{ secrets.DEPLOYPORT }}
-        script: rm -v /var/www/apps/truth-mta-wiki-bot-website/*
+        script: rm -r /var/www/apps/truth-mta-wiki-bot-website/*
       
     - name: Copy folder content recursively to remote
       uses: garygrossgarten/github-action-scp@release
