@@ -63,7 +63,7 @@ const actions = {
           console.log(error.message || error);
         } else {
           commit("setLoginRetry", 1);
-          await sleep(2500);
+          await sleep(5000);
           dispatch("doLogin", code);
         }
       });
