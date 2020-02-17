@@ -1,19 +1,36 @@
-name: remote ssh command
-on:
-  push:
-    branches:
-      -deploy
+on: push
+name: Build and Publish
 jobs:
-
-  build:
-    name: Build
+  FTP-Deploy-Action:
+    name: FTP-Deploy-Action
     runs-on: ubuntu-latest
     steps:
-    - name: executing remote ssh commands using password
+    - uses: actions/checkout@master
+    
+    - name: Use Node.js 12.x
+      uses: actions/setup-node@v1
+      with:
+        node-version: '12.x'
+        
+    - name: Build Project
+      run: |
+        npm install
+        npm run build
+        
+    - name: Clear website folder
       uses: appleboy/ssh-action@master
       with:
         host: ${{ secrets.DEPLOYHOST }}
         username: ${{ secrets.DEPLOYUSER }}
-        password: ${{ secrets.DEPLOYPASS }}
+        key: ${{ secrets.DEPLOYKEY }}
         port: ${{ secrets.DEPLOYPORT }}
-        script: ./truthwebpull.sh
+        script: rm -v /var/www/apps/truth-mta-wiki-bot-website/*
+      
+    - name: Copy folder content recursively to remote
+      uses: garygrossgarten/github-action-scp@release
+      with:
+          local: dist
+          remote: /var/www/apps/truth-mta-wiki-bot-website
+          host: ${{ secrets.DEPLOYHOST }}
+          username: ${{ secrets.DEPLOYUSER }}
+          privateKey: ${{ secrets.DEPLOYKEY }}
