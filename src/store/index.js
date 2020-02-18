@@ -30,7 +30,7 @@ const getters = {
 const actions = {
   redirectOnFetch() {
     if (localStorage.getItem("afterLoginRedirect")) {
-      router.push(localStorage.getItem("afterLoginRedirect"));
+      router.push(localStorage.getItem("afterLoginRedirect")).catch(() => {});
       localStorage.removeItem("afterLoginRedirect");
     }
   },
@@ -50,6 +50,7 @@ const actions = {
         commit("updateAccessToken", response.data.access_token);
         commit("updateUserObject", response.data.user);
         // Check for redirect
+        router.push("/").catch(() => {});
         dispatch("redirectOnFetch");
         commit("setLoginRetry", 0);
       })
@@ -142,7 +143,7 @@ const mutations = {
     state.loginError = null;
     state.user = null;
     state.dashboardGuildList = null;
-    router.push("/");
+    router.push("/").catch(() => {});
   },
   updateDashboardGuildList: (state, value) => {
     state.dashboardGuildList = value;
