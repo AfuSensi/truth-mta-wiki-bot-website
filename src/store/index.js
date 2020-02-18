@@ -74,7 +74,7 @@ const actions = {
   fetchAccessToken({ commit, dispatch }) {
     const token = localStorage.getItem("accessToken");
     commit("updateAccessToken", token);
-    if (token && router.currentRoute.fullPath !== "/callback") {
+    if (token && router.currentRoute.path !== "/callback") {
       dispatch("fetchUserInfo");
     }
   },
