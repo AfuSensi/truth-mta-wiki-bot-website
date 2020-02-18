@@ -72,10 +72,12 @@ const actions = {
     commit("logOut");
   },
   fetchAccessToken({ commit, dispatch }) {
-    const token = localStorage.getItem("accessToken");
-    commit("updateAccessToken", token);
-    if (token && router.currentRoute.path !== "/callback") {
-      dispatch("fetchUserInfo");
+    if (router.currentRoute.path !== "/callback") {
+      const token = localStorage.getItem("accessToken");
+      if (token) {
+        commit("updateAccessToken", token);
+        dispatch("fetchUserInfo");
+      }
     }
   },
   fetchUserInfo({ state, commit, dispatch }) {
